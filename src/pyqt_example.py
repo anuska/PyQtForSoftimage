@@ -66,7 +66,7 @@ class ExampleSignalSlot( ExampleDialog ):
     
     def closeEvent( self, event ):
         # Disconnect signals from slots when you close the widget.
-        # Softimage signals are muted if no other widgets are using them.
+        # Softimage events are muted if no other widgets are using them.
         from sisignals import signals
         signals.disconnect('siActivate', self.activate )
         signals.disconnect('siPassChange', self.passChanged )  
