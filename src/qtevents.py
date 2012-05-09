@@ -2,7 +2,7 @@ from PyQt4.QtCore import Qt
 
 from win32com.client import Dispatch as disp
 from win32com.client import constants as C
-si = disp('XSI.Application')
+si = disp('XSI.Application').Application
         
 # Create a mapping of virtual keys
 import win32con
@@ -276,13 +276,9 @@ def XSILoadPlugin( in_reg ):
     in_reg.RegisterEvent( "QtEvents_SelectionChange", C.siOnSelectionChange )
     in_reg.RegisterEvent( "QtEvents_ValueChange", C.siOnValueChange )
     
-    # mute immediately. the dialog is responsble for turning the events it needs on
-    events = si.EventInfos
-    from sisignals import EVENT_MAPPING
-    for key,value in EVENT_MAPPING.iteritems():
-        event = events( value )
-        if si.ClassName( event ) == "EventInfo":
-            event.Mute = True
+    # Clean the registry and mute the events immediately.
+    from sisignals import signals
+    signals.reload()
     
     return True
 
@@ -393,4 +389,3 @@ def QtEvents_SelectionChange_OnEvent( in_ctxt ):
 def QtEvents_ValueChange_OnEvent( in_ctxt ):
     from sisignals import signals
     signals.siValueChange.emit( in_ctxt.GetAttribute( "FullName" ) )
-

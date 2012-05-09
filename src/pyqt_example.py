@@ -46,15 +46,13 @@ class ExampleSignalSlot( ExampleDialog ):
         self.lineedit.setText( "" )
 
         # module containing sievents mapped to pyqtsignals
-        from sisignals import signals, muteSIEvent
+        from sisignals import signals
         
-        # connect the siActivate signal to the activate slot
-        signals.siActivate.connect( self.activate )
-        muteSIEvent( "siActivate", False )
+        # connect the siActivate signal to the activate slot and unmute the event if necessary.
+        signals.connect('siActivate', self.activate )
         
-        # connect the siPassChange signal to the passChanged slot
-        signals.siPassChange.connect( self.passChanged )
-        muteSIEvent( "siPassChange", False )
+        # connect the siPassChange signal to the passChanged slot and unmute the event if necessary.
+        signals.connect('siPassChange', self.passChanged )
 
     def activate( self, state = None ):
         if state is not None:
@@ -62,19 +60,16 @@ class ExampleSignalSlot( ExampleDialog ):
                 self.lineedit.setText( "Welcome Back!" )
             else:
                 self.lineedit.setText( "Good Bye!")
-                    
+           
     def passChanged( self, targetPass = "" ):
         self.lineedit.setText( targetPass )
     
     def closeEvent( self, event ):
-        # disconnect signals from slots when you close the widget
-        # muteSIEvent() can be used to mute the signals softimage events send
-        # but be careful if another widget exists and is using them
-        from sisignals import signals, muteSIEvent
-        signals.siActivate.disconnect( self.activate )
-        signals.siPassChange.disconnect( self.passChanged )  
-        #muteSIEvent( "siActivate", True )
-        #muteSIEvent( "siPassChange", True )
+        # Disconnect signals from slots when you close the widget.
+        # Softimage signals are muted if no other widgets are using them.
+        from sisignals import signals
+        signals.disconnect('siActivate', self.activate )
+        signals.disconnect('siPassChange', self.passChanged )  
 
 class ExampleMenu( QMenu ):
     def __init__( self, parent ):
@@ -82,7 +77,7 @@ class ExampleMenu( QMenu ):
         
         # add actions and a separator
         hello = self.addAction("Print 'Hello!'")
-        self.addSeparator()	
+        self.addSeparator()    
         world = self.addAction("Print 'World!'")
         
         # connect to the individual action's signal

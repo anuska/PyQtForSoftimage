@@ -3,7 +3,7 @@ from PyQt4.QtCore import pyqtSignal
 
 from win32com.client import Dispatch as disp
 from win32com.client import constants as C
-si = disp('XSI.Application')
+si = disp('XSI.Application').Application
 
 EVENT_MAPPING = {
     #pyqtsignal : softimage event
@@ -41,9 +41,10 @@ EVENT_MAPPING = {
 
 class SISignals( QObject ):
     """
-    class for mapping softimage events to pyqt signals
+    Class for mapping softimage events to pyqt signals
     not all context attributes are passed as signal arguments, add more as needed
-    currently all signals are expected to be 'siOnEnd' versions of softimage events      
+    currently all signals are expected to be 'siOnEnd' versions of softimage events.  
+    It is implemented as a singleton and registers which signals are in used with which slot.    
     """
     
     # add more pyqtsignals that map to softimage events here
@@ -79,14 +80,57 @@ class SISignals( QObject ):
         
     siValueChange = pyqtSignal(str) # siOnValueChange
     
+    _instance = None
+    
+    _connections = {}
+    
     def __init__(self):
         QObject.__init__(self)
         self.setObjectName( "siSignals" )
 
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super(SISignals, cls).__new__(cls, *args, **kwargs)
+        return cls._instance
+                    
+    def connect(self, signal, function):
+        if hasattr(self, signal):
+            if signal in self._connections:
+                slots = self._connections[signal]
+                if function not in slots:
+                    getattr(self, signal).connect(function)
+                    slots.append(function)
+            else:
+                getattr(self, signal).connect(function)
+                self._connections[signal] = [function]
+                muteSIEvent(signal, False)
+               
+    def disconnect(self, signal, function):
+        if hasattr(self, signal):
+            getattr(self, signal).disconnect(function)
+
+            if signal in self._connections:
+                slots = self._connections[signal]
+                if function in slots:
+                    slots.remove(function)
+                    if not len(slots):
+                        self._connections.pop(signal)
+                        muteSIEvent(signal, True)
+          
+    def emit(self, signal, *args):
+        if hasattr(self, signal):
+            getattr(self,signal).emit(*args)
+                                                  
+    def reload(self):
+        self._connections = {}
+        for signal in EVENT_MAPPING:
+            muteSIEvent(signal, True)
+            
 signals = SISignals()
 
-def muteSIEvent( event, state = True ):
+def muteSIEvent(signal, state=True):
     events = si.EventInfos
-    event = events( EVENT_MAPPING[event] )
-    if si.ClassName( event ) == "EventInfo":
+    event = events(EVENT_MAPPING[signal])
+    if si.ClassName(event) == "EventInfo":
         event.Mute = state
+        
