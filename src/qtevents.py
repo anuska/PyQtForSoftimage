@@ -278,7 +278,7 @@ def XSILoadPlugin( in_reg ):
     
     # Clean the registry and mute the events immediately.
     from sisignals import signals
-    signals.reload()
+    signals.reset()
     
     return True
 
@@ -308,15 +308,15 @@ def QtEvents_KeyUp_OnEvent( in_ctxt ):
 
 def QtEvents_Activate_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siActivate.emit( in_ctxt.GetAttribute( "State" ) )
+    signals.emit( "siActivate", in_ctxt.GetAttribute( "State" ) )
 
 def QtEvents_FileExport_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siFileExport.emit( in_ctxt.GetAttribute( "FileName" ) )
+    signals.emit( "siFileExport", in_ctxt.GetAttribute( "FileName" ) )
 
 def QtEvents_FileImport_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siFileImport.emit( in_ctxt.GetAttribute( "FileName" ) )
+    signals.emit( "siFileImport", in_ctxt.GetAttribute( "FileName" ) )
 
 #def QtEvents_CustomFileExport_OnEvent( in_ctxt ):
 
@@ -324,68 +324,68 @@ def QtEvents_FileImport_OnEvent( in_ctxt ):
 
 def QtEvents_RenderFrame_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siRenderFrame.emit( in_ctxt.GetAttribute( "FileName" ), in_ctxt.GetAttribute( "Frame" ) )
+    signals.emit( "siRenderFrame", in_ctxt.GetAttribute( "FileName" ), in_ctxt.GetAttribute( "Frame" ) )
 
 def QtEvents_RenderSequence_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siRenderSequence.emit( in_ctxt.GetAttribute( "FileName" ), in_ctxt.GetAttribute( "Frame" ) )
+    signals.emit( "siRenderSequence", in_ctxt.GetAttribute( "FileName" ), in_ctxt.GetAttribute( "Frame" ) )
 
 def QtEvents_RenderAbort_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siRenderAbort.emit( in_ctxt.GetAttribute( "FileName" ), in_ctxt.GetAttribute( "Frame" ) )
+    signals.emit( "siRenderAbort", in_ctxt.GetAttribute( "FileName" ), in_ctxt.GetAttribute( "Frame" ) )
 
 def QtEvents_PassChange_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siPassChange.emit( in_ctxt.GetAttribute( "TargetPass" ) )
+    signals.emit( "siPassChange", in_ctxt.GetAttribute( "TargetPass" ) )
 
 def QtEvents_SceneOpen_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siSceneOpen.emit( in_ctxt.GetAttribute( "FileName" ) )
+    signals.emit( "siSceneOpen", in_ctxt.GetAttribute( "FileName" ) )
     
 def QtEvents_SceneSaveAs_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siSceneSaveAs.emit( in_ctxt.GetAttribute( "FileName" ) )
+    signals.emit( "siSceneSaveAs", in_ctxt.GetAttribute( "FileName" ) )
 
 def QtEvents_SceneSave_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siSceneSave.emit( in_ctxt.GetAttribute( "FileName" ) )
+    signals.emit( "siSceneSave", in_ctxt.GetAttribute( "FileName" ) )
     
 def QtEvents_ChangeProject_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siChangeProject.emit( in_ctxt.GetAttribute( "NewProjectPath" ) )
+    signals.emit( "siChangeProject", in_ctxt.GetAttribute( "NewProjectPath" ) )
 
 def QtEvents_ConnectShader_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siConnectShader.emit( in_ctxt.GetAttribute( "Source" ), in_ctxt.GetAttribute( "Target" ) )
+    signals.emit( "siConnectShader", in_ctxt.GetAttribute( "Source" ), in_ctxt.GetAttribute( "Target" ) )
     
 def QtEvents_DisconnectShader_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siDisconnectShader.emit( in_ctxt.GetAttribute( "Source" ), in_ctxt.GetAttribute( "Target" ) )
+    signals.emit( "siDisconnectShader", in_ctxt.GetAttribute( "Source" ), in_ctxt.GetAttribute( "Target" ) )
     
 def QtEvents_CreateShader_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siCreateShader.emit( in_ctxt.GetAttribute( "Shader" ), in_ctxt.GetAttribute( "ProgID" ) )
+    signals.emit( "siCreateShader", in_ctxt.GetAttribute( "Shader" ), in_ctxt.GetAttribute( "ProgID" ) )
     
 def QtEvents_SourcePathChange_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siSourcePathChange.emit( in_ctxt.GetAttribute( "FileName" ) )
+    signals.emit( "siSourcePathChange", in_ctxt.GetAttribute( "FileName" ) )
 
 def QtEvents_DragAndDrop_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siDragAndDrop.emit( in_ctxt.GetAttribute( "DragSource" ) )
+    signals.emit( "siDragAndDrop", in_ctxt.GetAttribute( "DragSource" ) )
     
 def QtEvents_ObjectAdded_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siObjectAdded.emit( in_ctxt.GetAttribute( "Objects" ) )
+    signals.emit( "siObjectAdded", in_ctxt.GetAttribute( "Objects" ) )
     
 def QtEvents_ObjectRemoved_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siObjectRemoved.emit( in_ctxt.GetAttribute( "Objects" ) )
+    signals.emit( "siObjectRemoved", in_ctxt.GetAttribute( "Objects" ) )
     
 def QtEvents_SelectionChange_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siSelectionChange.emit( in_ctxt.GetAttribute( "ChangeType" ) )
+    signals.emit( "siSelectionChange", in_ctxt.GetAttribute( "ChangeType" ) )
     
 def QtEvents_ValueChange_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.siValueChange.emit( in_ctxt.GetAttribute( "FullName" ) )
+    signals.emit( "siValueChange", in_ctxt.GetAttribute( "FullName" ) )

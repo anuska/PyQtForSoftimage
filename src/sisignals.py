@@ -121,7 +121,7 @@ class SISignals( QObject ):
         if hasattr(self, signal):
             getattr(self,signal).emit(*args)
                                                   
-    def reload(self):
+    def reset(self):
         self._connections = {}
         for signal in EVENT_MAPPING:
             muteSIEvent(signal, True)
