@@ -37,6 +37,9 @@ EVENT_MAPPING = {
     "siSourcePathChange" : "QtEvents_SourcePathChange",
         
     "siValueChange" : "QtEvents_ValueChange",
+    
+    "siUndo": "QtEvents_Undo",
+    "siRedo": "QtEvents_Redo",    
 }
 
 class SISignals( QObject ):
@@ -78,8 +81,11 @@ class SISignals( QObject ):
     
     siSourcePathChange = pyqtSignal(str) # siOnSourcePathChange
         
-    siValueChange = pyqtSignal(str) # siOnValueChange
+    siValueChange = pyqtSignal(str, object, object) # siOnValueChange
     
+    siUndo = pyqtSignal() # siOnEndCommand (undo)
+    siRedo = pyqtSignal() # siOnEndCommand (redo)
+        
     _instance = None
     
     _connections = {}

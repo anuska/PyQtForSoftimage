@@ -276,6 +276,11 @@ def XSILoadPlugin( in_reg ):
     in_reg.RegisterEvent( "QtEvents_SelectionChange", C.siOnSelectionChange )
     in_reg.RegisterEvent( "QtEvents_ValueChange", C.siOnValueChange )
     
+    # events added in 2012, err v10.0
+    if xsi_version() >= 10.0:
+        in_reg.RegisterEvent( "QtEvents_Undo", C.siOnEndCommand)
+        in_reg.RegisterEvent( "QtEvents_Redo", C.siOnEndCommand)
+            
     # Clean the registry and mute the events immediately.
     from sisignals import signals
     signals.reset()
@@ -388,4 +393,16 @@ def QtEvents_SelectionChange_OnEvent( in_ctxt ):
     
 def QtEvents_ValueChange_OnEvent( in_ctxt ):
     from sisignals import signals
-    signals.emit( "siValueChange", in_ctxt.GetAttribute( "FullName" ) )
+    signals.emit( "siValueChange", in_ctxt.GetAttribute( "FullName" ), in_ctxt.GetAttribute( "Object" ), in_ctxt.GetAttribute( "PreviousValue" ))
+  
+def QtEvents_Undo_OnEvent( in_ctxt ):
+    o_command = in_ctxt.GetAttribute( "Command" )
+    if o_command.ScriptingName == "Undo":
+        from sisignals import signals
+        signals.emit( "siUndo" )
+  
+def QtEvents_Redo_OnEvent( in_ctxt ):
+    o_command = in_ctxt.GetAttribute( "Command" )
+    if o_command.ScriptingName == "Redo":
+        from sisignals import signals
+        signals.emit( "siRedo" )    
